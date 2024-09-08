@@ -18,6 +18,12 @@ public class TodoServiceImpl implements TodoService {
     public Todo createTodo(Todo todo) {
         return todoRepository.save(todo);
     }
+    @Override
+    public void markTodoComplete(Long id) {
+        Todo todo = getTodoById(id);
+        todo.setCompleted(true);
+        todoRepository.save(todo);
+    }
 
     @Override
     public List<Todo> getAllTodos() {

@@ -55,7 +55,6 @@ public class TodoController {
     public ResponseEntity<TodoResponse> updateTodo(@PathVariable Long id, @RequestBody TodoRequest todoRequest) {
         Todo updatedTodo = new Todo();
         updatedTodo.setTitle(todoRequest.getTitle());
-        // You can update completed status if needed
 
         Todo todo = todoService.updateTodo(id, updatedTodo);
         TodoResponse response = new TodoResponse(todo.getId(), todo.getTitle(), todo.isCompleted());
@@ -66,6 +65,12 @@ public class TodoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTodoById(@PathVariable Long id) {
         todoService.deleteTodoById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("/{id}/complete")
+    public ResponseEntity<Void> markTodoComplete(@PathVariable Long id) {
+        todoService.markTodoComplete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
