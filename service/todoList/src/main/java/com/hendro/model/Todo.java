@@ -1,23 +1,23 @@
 package com.hendro.model;
 
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "_todo")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Table(name = "todos") // Nama tabel di database
 public class Todo {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(nullable = false)
-    private String description;
-    private boolean completed;
+    private String title;
 
-
+    private boolean completed = false; // Default tidak selesai
 }

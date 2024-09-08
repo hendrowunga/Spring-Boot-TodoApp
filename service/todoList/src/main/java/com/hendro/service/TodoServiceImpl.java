@@ -1,19 +1,14 @@
 package com.hendro.service;
 
-import com.hendro.exception.TodoAlreadyExistsException;
 import com.hendro.exception.TodoNotFoundException;
 import com.hendro.model.Todo;
 import com.hendro.repository.TodoRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
-@NoArgsConstructor
 public class TodoServiceImpl implements TodoService {
 
     @Autowired
@@ -21,14 +16,6 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public Todo createTodo(Todo todo) {
-        // Pastikan bahwa ID tidak diset ketika membuat entitas baru
-        if (todo.getId() != null) {
-            // Jika ID diberikan, cek apakah sudah ada Todo dengan ID tersebut
-            if (todoRepository.existsById(todo.getId())) {
-                throw new TodoAlreadyExistsException("Todo already exists with ID: " + todo.getId());
-            }
-        }
-        // Simpan Todo baru
         return todoRepository.save(todo);
     }
 
@@ -38,33 +25,27 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public Todo getTodo(int id) {
-        // Menggunakan orElseThrow untuk menangani jika Todo tidak ditemukan
+    public Todo getTodoById(Long id) {
         return todoRepository.findById(id)
-                .orElseThrow(() -> new TodoNotFoundException("Requested Todo does not exist with ID: " + id));
+                .orElseThrow(() -> new TodoNotFoundException("Todo not found with id " + id));
     }
 
     @Override
-    public Todo editTodo(Todo updatedTodo, int id) {
-        // Ambil Todo lama
+    public Todo updateTodo(Long id, Todo updatedTodo) {
         Todo existingTodo = todoRepository.findById(id)
-                .orElseThrow(() -> new TodoNotFoundException("No Such Todo exists with ID: " + id));
+                .orElseThrow(() -> new TodoNotFoundException("Todo not found with id " + id));
 
-        // Update hanya properti yang perlu, jangan ubah ID
-        existingTodo.setDescription(updatedTodo.getDescription());
+        existingTodo.setTitle(updatedTodo.getTitle());
         existingTodo.setCompleted(updatedTodo.isCompleted());
 
-        // Simpan Todo yang diperbarui
         return todoRepository.save(existingTodo);
     }
 
     @Override
-    public void deleteTodo(int id) {
-        // Cek apakah Todo dengan ID tersebut ada
-        Todo requestedTodo = todoRepository.findById(id)
-                .orElseThrow(() -> new TodoNotFoundException("Requested Todo to be deleted does not exist with ID: " + id));
-
-        // Hapus Todo
+    public void deleteTodoById(Long id) {
+        if (!todoRepository.existsById(id)) {
+            throw new TodoNotFoundException("Todo not found with id " + id);
+        }
         todoRepository.deleteById(id);
     }
 }
