@@ -3,34 +3,26 @@ package com.hendro.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "token")
-
 public class Token {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @GeneratedValue
     private Integer id;
 
-    @Column(name = "access_token")
-    private String accessToken;
-
-    @Column(name = "refresh_token")
-    private String refreshToken;
-
-    @Column(name = "is_logged_out")
-    private boolean loggedOut;
+    @Column(unique = true)
+    private String token;
+    private LocalDateTime createdAt;
+    private LocalDateTime expiresAt;
+    private LocalDateTime validatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
-
-
-
 }

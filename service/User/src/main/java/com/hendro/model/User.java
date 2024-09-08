@@ -1,75 +1,78 @@
 package com.hendro.model;
 
 
+import com.hendro.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
+import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Setter
+import static jakarta.persistence.FetchType.EAGER;
+
 @Getter
-@Builder
-@AllArgsConstructor
+@Setter
+@SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "app_user")
-public class User implements UserDetails {
+@Table(name = "_user")
+@EntityListeners(AuditingEntityListener.class)
+public class User implements UserDetails, Principal {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @GeneratedValue
     private Integer id;
-
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
-    @Column(name = "username")
+    private String firstname;
+    private String lastname;
+    private LocalDate dateOfBirth;
+    @Column(unique = true)
     private String username;
-
-    @Column(name = "password")
+    private String email;
     private String password;
+    private boolean accountLocked;
+    private boolean enabled;
 
-    @Enumerated(value = EnumType.STRING)
-    private Role role;
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    @Column(insertable = false)
+    private LocalDateTime lastModifiedDate;
 
 
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
+    @ManyToMany(fetch = EAGER)
+    private List<Role> roles;
 
-    public Integer getId() {
-        return id;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles
+                .stream()
+                .map(r -> new SimpleGrantedAuthority(r.getName()))
+                .collect(Collectors.toList());
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    @Override
+    public String getPassword() {
+        return password;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
+    @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
@@ -79,7 +82,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !accountLocked;
     }
 
     @Override
@@ -89,39 +92,19 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String fullName() {
+        return getFirstname() + " " + getLastname();
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+    public String getName() {
+        return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public List<Token> getTokens() {
-        return tokens;
-    }
-
-    public void setTokens(List<Token> tokens) {
-        this.tokens = tokens;
+    public String getFullName() {
+        return firstname + " " + lastname;
     }
 }
