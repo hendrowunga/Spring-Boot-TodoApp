@@ -40,7 +40,7 @@
     {
       "email": "wunga@gmail.com",
       "username": "hendrowunga",
-      "password": "password123"
+      "password": "password1234"
     }
     ```
     - **Response Example**:
