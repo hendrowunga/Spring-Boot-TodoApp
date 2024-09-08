@@ -118,7 +118,7 @@
   - **Description**: Retrieving Todo by ID, and this is retrieving by ID if there is none.
   - **Successful Response**: HTTP 400 NOT FOUND
   
-    ![](picture/GetById.png)
+    ![](picture/getbyid.png)
 
   - **URL**: `http://localhost:8089/todos/5`
     - **Method**: `GET`
