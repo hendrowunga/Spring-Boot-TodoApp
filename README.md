@@ -16,7 +16,7 @@
       "password": "password123"
         }
         ```
-  - **Successful Response**: HTTP 200 OK (User registered successfully)
+  - **Successful Response**: HTTP 200 Accepted
 ![](picture/register.png)
 
 ### Email
@@ -30,7 +30,7 @@
     - **Description**: Activates a user's account using the token sent via email. This is required after the registration process to verify the user's email.
     - **Parameters**:
         - `token`: The token received in the user's email for activation.
-    - **Successful Response**: HTTP 200 OK (Account activated successfully)
+    - **Successful Response**: HTTP 200 OK 
 ![](picture/activate-account.png)
 
 ### Login (Authenticate)
@@ -45,13 +45,13 @@
       "password": "password1234"
     }
     ```
-    - **Response Example**:
+    - **Response**:
     ```json
     {
       "token": "eyJhbGciOiJIUzM4NCJ9.eyJmdWxsTmFtZSI6IkhlbmRybyBXdW5nYSIsInN1YiI6Ind1bmdhQGdtYWlsLmNvbSIsImlhdCI6MTcyNTgxMjUzNCwiZXhwIjoxNzI1ODk4OTM0LCJhdXRob3JpdGllcyI6WyJVU0VSIl19.EnThtLDO60Mzek3B6zwtNBz8EqkerBoUNvs8mKzFEwiO4DpDOLd4VlRjCFHoRIBH"
     }
     ```
-    - **Successful Response**: HTTP 200 OK (Authenticated successfully and JWT token returned)
+    - **Successful Response**: HTTP 200 OK 
 ![](picture/login.png)
 
 
