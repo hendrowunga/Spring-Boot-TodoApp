@@ -21,8 +21,8 @@
 
 ### Email
 - **URL**: `localhost:1080`
-- Once users register, they will receive an activation email to verify their email address and activate their account. This email contains a unique activation code, which must be used to activate the account.
-![](picture/email.png)
+    - Once users register, they will receive an activation email to verify their email address and activate their account. This email contains a unique activation code, which must be used to activate the account.
+  ![](picture/email.png)
 
 ### Activate user account
 - **URL**: `{{api_url}}:{{api_port}}/api/v1/auth/activate-account?token=355034`
