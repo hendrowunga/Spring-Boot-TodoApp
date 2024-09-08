@@ -53,11 +53,11 @@ public class EmailService {
         Context context = new Context();
         context.setVariables(properties);
 
-        helper.setFrom("to-do.office.com");
+        helper.setFrom("to-do@gmail.com");
         helper.setTo(to);
         helper.setSubject(subject);
 
-        String template = templateEngine.process(templateName, context);
+        String template = templateEngine.process(templateName,  context);
 
         helper.setText(template, true);
 
