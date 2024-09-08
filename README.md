@@ -56,3 +56,117 @@
 
 
 ## TODO
+
+### Created Todo
+- **URL**: `http://localhost:8089/todos`
+  - **Method**: `POST`
+  - **Description**: Creating a new Todo
+  - **Request Body Example**:
+      ```json
+      {
+    "title": "Belajar  Java"
+    }
+      ```
+  - **Successful Response**: HTTP 200 Created 
+    ```json
+    {
+    "id": 5,
+    "title": "Belajar  Java",
+    "completed": false
+    }
+      ```
+    ![](picture/created.png)
+
+
+### All Todo
+- **URL**: `http://localhost:8089/todos`
+  - **Method**: `GET`
+  - **Description**: take a list of all Todos.
+  - **Successful Response**: HTTP 200 OK 
+    ```json
+    {
+    [
+    {
+        "id": 2,
+        "title": "Belajar Spring Boot",
+        "completed": false
+    },
+    {
+        "id": 3,
+        "title": "Belajar Spring Laravel",
+        "completed": false
+    },
+    {
+        "id": 4,
+        "title": "Belajar  HTML",
+        "completed": false
+    },
+    {
+        "id": 5,
+        "title": "Belajar  Java",
+        "completed": false
+    }
+    ]
+    
+    }
+      ```
+    ![](picture/GetAll.png)
+
+### Get By ID
+- **URL**: `http://localhost:8089/todos/1`
+  - **Method**: `GET`
+  - **Description**: Retrieving Todo by ID, and this is retrieving by ID if there is none.
+  - **Successful Response**: HTTP 400 NOT FOUND
+  
+    ![](picture/GetById.png)
+
+  - **URL**: `http://localhost:8089/todos/5`
+    - **Method**: `GET`
+    - **Description**: Retrieving Todo by ID, and this is retrieving by ID if there is none.
+    - **Successful Response**: HTTP 200 OK
+        ```json
+      {
+      "id": 5,
+      "title": "Belajar  Java",
+      "completed": false
+      }
+      ```
+    ![](picture/byid.png)
+
+### Update Todo
+- **URL**: `http://localhost:8089/todos/3`
+  - **Method**: `PUT`
+  - **Description**: Update existing Todo based on ID.
+  - **Successful Response**: HTTP 200 OK
+      ```json
+      {
+      "id": 3,
+      "title": "Belajar Laravel)",
+      "completed": false
+      }
+      ```
+
+    ![](picture/update.png)
+
+
+### Delete Todo
+- **URL**: `http://localhost:8089/todos/3`
+  - **Method**: `DELETE`
+  - **Description**: Delete Todo by ID.
+  - **Successful Response**: HTTP 204 No Content
+
+    ![](picture/delete.png)
+
+
+
+### Completed Todo
+- **URL**: `http://localhost:8089/todos/3`
+  - **Method**: `PATCH`
+  - **Description**: Mark Todo as complete.
+  - **Successful Response**: HTTP 204 No Content
+
+    ![](picture/completed.png)
+
+
+
+
