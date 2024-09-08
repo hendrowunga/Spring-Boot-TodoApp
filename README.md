@@ -1,5 +1,7 @@
 # REST API TODOAPP
 
+## USER
+
 ### Register a new user
 - **URL**: `{{api_url}}:{{api_port}}/api/v1/auth/register`
     - **Method**: `POST`
@@ -51,3 +53,6 @@
     ```
     - **Successful Response**: HTTP 200 OK (Authenticated successfully and JWT token returned)
 ![](picture/login.png)
+
+
+## TODO
