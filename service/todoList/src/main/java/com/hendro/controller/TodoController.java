@@ -8,36 +8,59 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/todos")
+@RequestMapping("/todos")
 public class TodoController {
 
     @Autowired
     private TodoService todoService;
 
     @PostMapping
-    public ResponseEntity<Todo> createTodo(@RequestBody Todo todo) {
+    public ResponseEntity<TodoResponse> createTodo(@RequestBody TodoRequest todoRequest) {
+        Todo todo = new Todo();
+        todo.setTitle(todoRequest.getTitle());
+
         Todo createdTodo = todoService.createTodo(todo);
-        return new ResponseEntity<>(createdTodo, HttpStatus.CREATED);
+
+        TodoResponse response = new TodoResponse(
+                createdTodo.getId(),
+                createdTodo.getTitle(),
+                createdTodo.isCompleted()
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Todo>> getAllTodos() {
+    public ResponseEntity<List<TodoResponse>> getAllTodos() {
         List<Todo> todos = todoService.getAllTodos();
-        return new ResponseEntity<>(todos, HttpStatus.OK);
+        List<TodoResponse> response = todos.stream()
+                .map(todo -> new TodoResponse(todo.getId(), todo.getTitle(), todo.isCompleted()))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Todo> getTodoById(@PathVariable Long id) {
+    public ResponseEntity<TodoResponse> getTodoById(@PathVariable Long id) {
         Todo todo = todoService.getTodoById(id);
-        return new ResponseEntity<>(todo, HttpStatus.OK);
+        TodoResponse response = new TodoResponse(todo.getId(), todo.getTitle(), todo.isCompleted());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
-        Todo updatedTodo = todoService.updateTodo(id, todo);
-        return new ResponseEntity<>(updatedTodo, HttpStatus.OK);
+    public ResponseEntity<TodoResponse> updateTodo(@PathVariable Long id, @RequestBody TodoRequest todoRequest) {
+        Todo updatedTodo = new Todo();
+        updatedTodo.setTitle(todoRequest.getTitle());
+        // You can update completed status if needed
+
+        Todo todo = todoService.updateTodo(id, updatedTodo);
+        TodoResponse response = new TodoResponse(todo.getId(), todo.getTitle(), todo.isCompleted());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

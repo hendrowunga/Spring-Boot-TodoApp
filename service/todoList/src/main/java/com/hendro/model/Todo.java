@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "todos") // Nama tabel di database
+@Table(name = "todos")
 public class Todo {
 
     @Id
@@ -19,5 +19,5 @@ public class Todo {
     @Column(nullable = false)
     private String title;
 
-    private boolean completed = false; // Default tidak selesai
+    private boolean completed = false;
 }
