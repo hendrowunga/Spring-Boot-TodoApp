@@ -36,7 +36,6 @@ public class User implements UserDetails, Principal {
     private Integer id;
     private String firstname;
     private String lastname;
-    private LocalDate dateOfBirth;
     @Column(unique = true)
     private String username;
     private String email;
@@ -55,6 +54,8 @@ public class User implements UserDetails, Principal {
 
     @ManyToMany(fetch = EAGER)
     private List<Role> roles;
+
+
 
 
     @Override
