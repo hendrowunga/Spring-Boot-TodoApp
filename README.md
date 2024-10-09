@@ -5,6 +5,7 @@
 ### Register a new user
 - **URL**: `{{api_url}}:{{api_port}}/api/v1/auth/register`
     - **Method**: `POST`
+    - **EndPoint**: `("/register")`
     - **Description**: Registers a new user in the system. The request body should contain the user's details (e.g., email, password, etc.).
     - **Request Body Example**:
         ```json
@@ -27,6 +28,7 @@
 ### Activate user account
 - **URL**: `{{api_url}}:{{api_port}}/api/v1/auth/activate-account?token=355034`
     - **Method**: `GET`
+    - **EndPoint**: `("/activate-account")`
     - **Description**: Activates a user's account using the token sent via email. This is required after the registration process to verify the user's email.
     - **Parameters**:
         - `token`: The token received in the user's email for activation.
@@ -36,6 +38,7 @@
 ### Login (Authenticate)
 - **URL**: `{{api_url}}:{{api_port}}/api/v1/auth/authenticate`
     - **Method**: `POST`
+    - **EndPoint**: `("/authenticate")`
     - **Description**: Authenticates a user and returns a JWT token. This token is used to access protected resources.
     - **Request Body Example**:
     ```json
@@ -167,6 +170,94 @@
 
     ![](picture/completed.png)
 
+## Configuration
+- **docker-compose.yml**: 
+  ```
+  services:
+    postgres:
+      container_name: postgres-sql-todo
+      image: postgres
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        PGDATA: /var/lib/postgresql/data
+      volumes:
+        - postgres:/data/postgres
+      ports:
+        - 5432:5432
+      networks:
+        - spring-demo
+      restart: unless-stopped
+    mail-dev:
+      container_name: mail-dev-todo
+      image: maildev/maildev
+      ports:
+        - 1080:1080
+        - 1025:1025
+  networks:
+    spring-demo:
+    driver: bridge
+
+  volumes:
+    postgres:
+    driver: local
+  ```
+
+- **application-dev.yml**:
+  ```
+  spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/todoApp
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    host: localhost
+    port: 1025
+    username: ali
+    password: ali
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enabled: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
+  application:
+    security:
+      jwt:
+        secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+        expiration: 86400000 # a day
+    mailing:
+      frontend:
+        activation-url: http://localhost:4200/activate-account
+
+  server:
+    port: 8088
+  ```
+- **application.yml**:
+  ```
+  spring:
+  profiles:
+    active: dev
+  springdoc:
+    default-produces-media-type: application/json
+  server:
+    servlet:
+      context-path: /api/v1/
+  ```
 
 
 
